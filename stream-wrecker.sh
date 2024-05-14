@@ -28,7 +28,7 @@ fi
 
 shift $((OPTIND-1))
 
-outputPath="$HOME/Videos"
+outputPath="$HOME/Videos/"
 
 streamName=$(echo "$u3m8" | grep -oP 'amlst:\K[^-]*')
 outputFile="$outputPath${streamName}_$(date +"%d_%m_%Y-%H-%M-%S").mkv"
