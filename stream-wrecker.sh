@@ -14,23 +14,41 @@ while getopts "i:" opt; do
         \?)
             echo "ERROR: Invalid option: -${OPTARG}" >&2
             usage
+            exit 1
             ;;
         :)
             echo "Option -${OPTARG} requires an argument." >&2
-            exit
+            usage
+            exit 1
             ;;
     esac
 done
 
 if [ "$OPTIND" -eq 1 ]; then
-    echo "No options were passed EXITING";
+    echo "No options were passed. EXITING";
+    usage
+    exit 1
 fi
 
 shift $((OPTIND-1))
 
-outputPath="$HOME/Videos/"
+OUTPUTDIR="/mnt/Crucial2TB/.Videos"
 
-streamName=$(echo "$u3m8" | grep -oP 'amlst:\K[^-]*')
-outputFile="$outputPath${streamName}_$(date +"%d_%m_%Y-%H-%M-%S").mkv"
+[ -d "$OUTPUTDIR" ] && mkdir -p "$OUTPUTDIR"
 
-watch -n2 ffmpeg -i "$u3m8" -c copy -bsf:a aac_adtstoasc "$outputFile" > /dev/null 2>&1 < /dev/null
+# Extract username from the URL (adjust pattern as needed for your case)
+username=$(echo "$u3m8" | grep -oP 'amlst:\K[^-]*')
+if [ -z "$username" ]; then
+    exit 1
+fi
+
+while true; do
+    OUTPUT="${username}_$(date +"%d_%m_%Y-%H-%M-%S")"
+    outputFile="$OUTPUTDIR/$OUTPUT.mkv"
+
+    ffmpeg -i "$u3m8" -c copy -bsf:a aac_adtstoasc "$outputFile" > /dev/null 2>&1 < /dev/null
+
+    echo "Stream not interrupted. Retrying in 5 seconds..."
+    sleep 5
+done
+
