@@ -32,11 +32,10 @@ fi
 
 shift $((OPTIND-1))
 
-OUTPUTDIR="/mnt/Crucial2TB/.Videos"
+OUTPUTDIR="$HOME/Videos"
 
 [ -d "$OUTPUTDIR" ] && mkdir -p "$OUTPUTDIR"
 
-# Extract username from the URL (adjust pattern as needed for your case)
 username=$(echo "$u3m8" | grep -oP 'amlst:\K[^-]*')
 if [ -z "$username" ]; then
     exit 1
