@@ -47,7 +47,7 @@ while true; do
 
     ffmpeg -i "$u3m8" -c copy -bsf:a aac_adtstoasc "$outputFile" > /dev/null 2>&1 < /dev/null
 
-    echo "Stream not interrupted. Retrying in 5 seconds..."
+    echo "'${username}' stream interrupted. Retrying in 5 seconds..."
     sleep 5
 done
 
